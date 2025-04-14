@@ -406,18 +406,18 @@ async function fetchBibTeX() {
         
         if (!data) {
             document.open();
-            document.write('Error: Invalid BibTeX data');
+            document.write(JSON.stringify({ error: "Invalid BibTeX data" }));
             document.close();
             return;
         }
         
         const xmlString = bibTeXToXML(data);
         document.open();
-        document.write(xmlString);
+        document.write(JSON.stringify({ xmlString: xmlString }));
         document.close();
     } catch (error) {
         document.open();
-        document.write(`Error: ${error.message}`);
+        document.write(JSON.stringify({ error: error.message }));
         document.close();
     }
 }
