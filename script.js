@@ -371,24 +371,8 @@ async function fetchBibTeX() {
     // Get DOI from query parameter
     const urlParams = new URLSearchParams(window.location.search);
     const doi = urlParams.get('doi');
-    
-    if (!doi) {
-        document.open();
-        document.write('Error: No DOI provided');
-        document.close();
-        return;
-    }
-    
     const cleanDoi = cleanDOI(doi);
-    if (!cleanDoi) {
-        document.open();
-        document.write('Error: Invalid DOI');
-        document.close();
-        return;
-    }
-    
     const url = `https://doi.org/${cleanDoi}`;
-    
     try {
         const response = await fetch(url, {
             headers: {
@@ -403,22 +387,28 @@ async function fetchBibTeX() {
         const bibtex = await response.text();
         console.log(bibtex);
         const data = parseBibTeX(bibtex);
+        const response = { xmlString: xmlString };
+        document.getElementById('response').textContent = JSON.stringify(response);
         
-        if (!data) {
-            document.open();
-            document.write(JSON.stringify({ error: "Invalid BibTeX data" }));
-            document.close();
+        // If this is meant to be a true API endpoint, use:
+        if (window.location.search.includes('format=json')) {
+            document.body.innerHTML = '';
+            document.body.textContent = JSON.stringify(response);
+            document.querySelector('head').innerHTML = '<meta http-equiv="Content-Type" content="application/json; charset=utf-8">';
+        }
+    } catch (error) {
+        if (error) {
+            const response = { error: error.message };
+            document.getElementById('response').textContent = JSON.stringify(response);
+            
+            // If this is meant to be a true API endpoint, use:
+            if (window.location.search.includes('format=json')) {
+                document.body.innerHTML = '';
+                document.body.textContent = JSON.stringify(response);
+                document.querySelector('head').innerHTML = '<meta http-equiv="Content-Type" content="application/json; charset=utf-8">';
+            }
             return;
         }
-        
-        const xmlString = bibTeXToXML(data);
-        document.open();
-        document.write(JSON.stringify({ xmlString: xmlString }));
-        document.close();
-    } catch (error) {
-        document.open();
-        document.write(JSON.stringify({ error: error.message }));
-        document.close();
     }
 }
 
