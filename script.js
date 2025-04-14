@@ -398,13 +398,12 @@ async function fetchBibTeX() {
         }
     } catch (error) {
         if (error) {
-            const response = { error: error.message };
-            document.getElementById('response').textContent = JSON.stringify(response);
+            document.getElementById('response').textContent = JSON.stringify({ error: error.message });
             
             // If this is meant to be a true API endpoint, use:
             if (window.location.search.includes('format=json')) {
                 document.body.innerHTML = '';
-                document.body.textContent = JSON.stringify(response);
+                document.body.textContent = JSON.stringify({ error: error.message });
                 document.querySelector('head').innerHTML = '<meta http-equiv="Content-Type" content="application/json; charset=utf-8">';
             }
             return;
