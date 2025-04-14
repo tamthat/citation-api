@@ -387,12 +387,12 @@ async function fetchBibTeX() {
         const bibtex = await response.text();
         console.log(bibtex);
         const data = parseBibTeX(bibtex);
-        document.getElementById('response').textContent = JSON.stringify({ xmlString: xmlString });
+        document.getElementById('response').textContent = JSON.stringify({ xmlString: data });
         
         // If this is meant to be a true API endpoint, use:
         if (window.location.search.includes('format=json')) {
             document.body.innerHTML = '';
-            document.body.textContent = JSON.stringify({ xmlString: xmlString });
+            document.body.textContent = JSON.stringify({ xmlString: data });
             document.querySelector('head').innerHTML = '<meta http-equiv="Content-Type" content="application/json; charset=utf-8">';
         }
     } catch (error) {
