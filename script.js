@@ -401,6 +401,7 @@ async function fetchBibTeX() {
         }
         
         const bibtex = await response.text();
+        console.log(bibtex);
         const data = parseBibTeX(bibtex);
         
         if (!data) {
