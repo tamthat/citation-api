@@ -387,7 +387,6 @@ async function fetchBibTeX() {
         const bibtex = await response.text();
         
         const data = parseBibTeX(bibtex);
-        console.log(data, typeOf(data));
         document.getElementById('response').textContent = JSON.stringify({ xmlString: bibTeXToXML(data) });
         
         // If this is meant to be a true API endpoint, use:
